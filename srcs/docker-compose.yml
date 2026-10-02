@@ -106,6 +106,45 @@ services:
     depends_on:
       - mariadb
 
+  #--------------------
+  # FTP Service
+  #--------------------
+  ftp:
+    build:
+      context: requirements/bonus/ftp
+      dockerfile: Dockerfile
+    container_name: ftp
+    restart: always
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    environment:
+      FTP_USER: "${FTP_USER}"
+      FTP_PASSWORD: "${FTP_PASSWORD}"
+    secrets:
+      - db_password
+    volumes:
+      - wordpress-data:/var/www/wordpress
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+
+  #--------------------
+  # Static Website Service
+  #--------------------
+  static-website:
+    build:
+      context: requirements/bonus/static-website
+      dockerfile: Dockerfile
+    image: static-website
+    container_name: static-website
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - inception
+
 #------------------------------------------------------
 # Networks
 #------------------------------------------------------

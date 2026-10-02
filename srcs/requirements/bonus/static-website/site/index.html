@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Showcase</title>
+    <meta name="description" content="A visually stunning showcase site with rich animations, featuring services, portfolio, and testimonials.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --glow: rgba(99, 102, 241, 0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-light); overflow-x: hidden; }
+
+        /* ── Custom Animations ── */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--glow); }
+            50% { box-shadow: 0 0 60px var(--glow), 0 0 120px rgba(99,102,241,0.2); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-80px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(80px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes rotate3d {
+            0% { transform: perspective(800px) rotateY(0deg); }
+            100% { transform: perspective(800px) rotateY(360deg); }
+        }
+        @keyframes blob {
+            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: scale(1) rotate(0deg); }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; transform: scale(1.05) rotate(10deg); }
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: var(--primary); }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 7s ease-in-out 1s infinite; }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .animate-slide-up { animation: slideUp 0.8s ease-out forwards; }
+        .animate-slide-left { animation: slideInLeft 0.8s ease-out forwards; }
+        .animate-slide-right { animation: slideInRight 0.8s ease-out forwards; }
+        .animate-scale-in { animation: scaleIn 0.6s ease-out forwards; }
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        .animate-shimmer { background-size: 200% auto; animation: shimmer 3s linear infinite; }
+        .animate-blob { animation: blob 8s ease-in-out infinite; }
+        .animate-typing {
+            overflow: hidden; white-space: nowrap; border-right: 3px solid var(--primary);
+            width: 0; animation: typing 2.5s steps(30) forwards, blink 0.8s step-end infinite;
+        }
+
+        /* Scroll-reveal base */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.7); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        .stagger-item { opacity: 0; transform: translateY(30px); }
+        .stagger-item.visible { animation: slideUp 0.6s ease-out forwards; }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Glass card */
+        .glass {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+
+        /* Hero blob */
+        .hero-blob {
+            position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+            filter: blur(60px); animation: blob 12s ease-in-out infinite; pointer-events: none;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute; border-radius: 50%; background: rgba(99,102,241,0.3);
+            animation: float 8s ease-in-out infinite; pointer-events: none;
+        }
+
+        /* Card hover shine */
+        .card-shine {
+            position: relative; overflow: hidden;
+        }
+        .card-shine::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%);
+            transform: translateX(-100%) rotate(25deg); transition: transform 0.8s ease;
+        }
+        .card-shine:hover::after {
+            transform: translateX(100%) rotate(25deg);
+        }
+
+        /* Progress bar animation */
+        .progress-fill {
+            width: 0%; transition: width 1.5s ease;
+        }
+        .progress-fill.animate { width: var(--target); }
+
+        /* Typing cursor */
+        .typing-cursor::after {
+            content: '|'; animation: blink 0.8s step-end infinite; color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero-blob { width: 300px; height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="fixed top-0 left-0 w-full z-50 glass" id="header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 sm:h-18">
+            <a href="#" class="text-xl sm:text-2xl font-extrabold tracking-tight flex items-center gap-2 group" id="logo-link">
+                <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold group-hover:scale-110 transition-transform">S</span>
+                <span class="gradient-text">Showcase</span>
+            </a>
+            <nav aria-label="Primary navigation">
+                <ul class="flex items-center gap-1 sm:gap-6" id="nav-list">
+                    <!-- rendered by JS -->
+                </ul>
+            </nav>
+            <button class="sm:hidden text-2xl p-2 focus:outline-none" id="mobile-menu-btn" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- mobile menu -->
+        <div class="hidden sm:hidden px-4 pb-4" id="mobile-menu">
+            <ul class="flex flex-col gap-2" id="mobile-nav-list">
+                <!-- rendered by JS -->
+            </ul>
+        </div>
+    </header>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16" id="hero">
+        <div class="hero-blob" style="top:-10%;left:-10%;"></div>
+        <div class="hero-blob" style="bottom:-20%;right:-10%;animation-delay:4s;background:radial-gradient(circle,rgba(168,85,247,0.15) 0%,transparent 70%);"></div>
+        <div class="particle" style="width:6px;height:6px;top:20%;left:15%;animation-delay:0s;"></div>
+        <div class="particle" style="width:10px;height:10px;top:45%;right:20%;animation-delay:2s;"></div>
+        <div class="particle" style="width:5px;height:5px;bottom:30%;left:25%;animation-delay:4s;"></div>
+        <div class="particle" style="width:8px;height:8px;top:70%;right:35%;animation-delay:1s;"></div>
+        <div class="particle" style="width:4px;height:4px;top:15%;right:40%;animation-delay:3s;"></div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium mb-6 animate-fade-in reveal">
+                <span class="inline-block w-2 h-2 rounded-full bg-indigo-400 animate-pulse mr-2"></span>
+                Now available in early access
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-tight mb-6 reveal" style="animation-delay:0.1s;">
+                Build <span class="gradient-text">stunning</span><br>
+                experiences today
+            </h1>
+            <p class="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-slate-300 mb-8 reveal" style="animation-delay:0.2s;">
+                We craft digital products that blend <span class="text-indigo-300 font-semibold">beautiful design</span> with <span class="text-indigo-300 font-semibold">powerful performance</span> — bringing your vision to life with cutting-edge technology.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 reveal" style="animation-delay:0.3s;">
+                <a href="#services" class="inline-block px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:from-indigo-500 hover:to-purple-500 transition-all hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/25 animate-pulse-glow">Get Started</a>
+                <a href="#portfolio" class="inline-block px-8 py-3.5 rounded-xl border border-slate-500/40 text-slate-200 font-semibold hover:bg-slate-800/50 hover:border-indigo-400/40 transition-all hover:scale-105">View Our Work</a>
+            </div>
+        </div>
+
+        <!-- scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-500 animate-float">
+            <span class="text-xs uppercase tracking-widest">Scroll</span>
+            <i class="fas fa-chevron-down text-sm"></i>
+        </div>
+    </section>
+
+    <!-- ═══ SERVICES ═══ -->
+    <section class="py-20 sm:py-28 relative" id="services">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">What We Do</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-3">Our <span class="gradient-text">Services</span></h2>
+                <p class="text-slate-400 mt-4 max-w-2xl mx-auto">From concept to launch, we provide end-to-end solutions that drive results.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="services-grid">
+                <!-- rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ STATS ═══ -->
+    <section class="py-16 sm:py-20 relative" id="stats">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10" id="stats-grid">
+                <!-- rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ PORTFOLIO ═══ -->
+    <section class="py-20 sm:py-28 relative" id="portfolio">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Our Work</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-3">Featured <span class="gradient-text">Projects</span></h2>
+                <p class="text-slate-400 mt-4 max-w-2xl mx-auto">Each project reflects our passion for innovation and attention to detail.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="portfolio-grid">
+                <!-- rendered by JS -->
+            </div>
+            <div class="text-center mt-12 reveal">
+                <a href="#" class="inline-block px-8 py-3.5 rounded-xl border border-slate-500/40 text-slate-200 font-semibold hover:bg-slate-800/50 hover:border-indigo-400/40 transition-all hover:scale-105">View All Projects <i class="fas fa-arrow-right ml-2 text-sm"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ TESTIMONIALS ═══ -->
+    <section class="py-20 sm:py-28 relative" id="testimonials">
+        <div class="hero-blob" style="top:20%;left:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(236,72,153,0.12) 0%,transparent 70%);"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <span class="text-indigo-400 font-semibold text-sm uppercase tracking-widest">Testimonials</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-3">What <span class="gradient-text">Clients</span> Say</h2>
+                <p class="text-slate-400 mt-4 max-w-2xl mx-auto">Real feedback from real people we've had the pleasure of working with.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="testimonials-grid">
+                <!-- rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <section class="py-20 sm:py-28 relative" id="cta">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <div class="glass rounded-2xl p-8 sm:p-16 border border-indigo-500/10">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6">Ready to <span class="gradient-text">level up</span>?</h2>
+                <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">Let's collaborate and build something extraordinary together. Your vision, our expertise.</p>
+                <a href="#" class="inline-block px-10 py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-lg hover:from-indigo-500 hover:to-purple-500 transition-all hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/25">Start a Project</a>
+                <p class="text-slate-500 text-sm mt-4">No commitment. Free consultation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="border-t border-slate-800 py-12 sm:py-16" id="footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
+                <div class="col-span-1 lg:col-span-1">
+                    <a href="#" class="text-xl font-extrabold flex items-center gap-2 mb-4">
+                        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold">S</span>
+                        <span class="gradient-text">Showcase</span>
+                    </a>
+                    <p class="text-slate-400 text-sm leading-relaxed">Crafting digital excellence with passion and precision. Let's build the future.</p>
+                    <div class="flex gap-4 mt-5" id="social-links">
+                        <!-- rendered by JS -->
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-slate-300 mb-4">Quick Links</h4>
+                    <ul class="space-y-2.5" id="footer-links-1">
+                        <!-- rendered by JS -->
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-slate-300 mb-4">Resources</h4>
+                    <ul class="space-y-2.5" id="footer-links-2">
+                        <!-- rendered by JS -->
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-slate-300 mb-4">Contact</h4>
+                    <ul class="space-y-2.5 text-slate-400 text-sm" id="contact-info">
+                        <!-- rendered by JS -->
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 mt-10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
+                <p>&copy; 2025 Showcase. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-indigo-400 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-indigo-400 transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ════════════════════════════════════════════════════════════
+        // 1. DATA LAYER
+        // ════════════════════════════════════════════════════════════
+
+        const navItems = [
+            { label: "Services", href: "#services" },
+            { label: "Portfolio", href: "#portfolio" },
+            { label: "Testimonials", href: "#testimonials" },
+            { label: "Contact", href: "#cta" }
+        ];
+
+        const services = [
+            {
+                icon: "fas fa-paint-brush",
+                title: "UI/UX Design",
+                desc: "Beautiful, intuitive interfaces that delight users and drive engagement across every touchpoint.",
+                color: "from-indigo-500 to-purple-600"
+            },
+            {
+                icon: "fas fa-code",
+                title: "Web Development",
+                desc: "High-performance, responsive web applications built with modern frameworks and best practices.",
+                color: "from-purple-500 to-pink-600"
+            },
+            {
+                icon: "fas fa-mobile-alt",
+                title: "Mobile Apps",
+                desc: "Native-feeling mobile experiences for iOS and Android that users love to interact with.",
+                color: "from-pink-500 to-rose-600"
+            },
+            {
+                icon: "fas fa-chart-line",
+                title: "SEO & Analytics",
+                desc: "Data-driven strategies to boost your visibility, traffic, and conversion rates organically.",
+                color: "from-emerald-500 to-teal-600"
+            },
+            {
+                icon: "fas fa-cloud",
+                title: "Cloud Solutions",
+                desc: "Scalable, secure cloud infrastructure that grows with your business and ensures uptime.",
+                color: "from-cyan-500 to-blue-600"
+            },
+            {
+                icon: "fas fa-robot",
+                title: "AI Integration",
+                desc: "Smart automation and AI-powered features that streamline workflows and unlock new insights.",
+                color: "from-amber-500 to-orange-600"
+            }
+        ];
+
+        const stats = [
+            { value: "120+", label: "Projects Delivered", icon: "fas fa-rocket" },
+            { value: "8+", label: "Years Experience", icon: "fas fa-calendar-alt" },
+            { value: "50+", label: "Happy Clients", icon: "fas fa-heart" },
+            { value: "15+", label: "Team Members", icon: "fas fa-users" }
+        ];
+
+        const portfolioItems = [
+            { title: "Nova Dashboard", tag: "Web App", img: "https://picsum.photos/600/400?random=1", alt: "Nova dashboard analytics interface showing charts and data" },
+            { title: "Bloom Marketplace", tag: "E-commerce", img: "https://picsum.photos/600/400?random=2", alt: "Bloom online marketplace product grid" },
+            { title: "Vertex Studio", tag: "Branding", img: "https://picsum.photos/600/400?random=3", alt: "Vertex Studio brand identity presentation" },
+            { title: "Pulse Fitness", tag: "Mobile App", img: "https://picsum.photos/600/400?random=4", alt: "Pulse fitness mobile app workout screen" },
+            { title: "Drift Travel", tag: "Website", img: "https://picsum.photos/600/400?random=5", alt: "Drift travel booking website hero section" },
+            { title: "Aurora AI", tag: "AI Platform", img: "https://picsum.photos/600/400?random=6", alt: "Aurora AI platform interface with neural network visualization" }
+        ];
+
+        const testimonials = [
+            {
+                quote: "Working with this team was a game-changer. They transformed our outdated platform into a modern, fast, and beautiful experience our users love.",
+                name: "Sofia Chen",
+                role: "CEO, Lumina Tech",
+                avatar: "https://picsum.photos/80/80?random=10",
+                alt: "Portrait of Sofia Chen"
+            },
+            {
+                quote: "The attention to detail and user-centric approach exceeded our expectations. Our engagement metrics improved dramatically within weeks of launch.",
+                name: "Marcus Rivera",
+                role: "Product Lead, Vivid Apps",
+                avatar: "https://picsum.photos/80/80?random=11",
+                alt: "Portrait of Marcus Rivera"
+            },
+            {
+                quote: "From concept to delivery, the process was seamless. They didn't just build a product — they built a partnership. Highly recommend their services.",
+                name: "Aisha Patel",
+                role: "Founder, Greenline",
+                avatar: "https://picsum.photos/80/80?random=12",
+                alt: "Portrait of Aisha Patel"
+            }
+        ];
+
+        const socialLinks = [
+            { icon: "fab fa-github", href: "#", label: "GitHub" },
+            { icon: "fab fa-twitter", href: "#", label: "Twitter" },
+            { icon: "fab fa-linkedin-in", href: "#", label: "LinkedIn" },
+            { icon: "fab fa-dribbble", href: "#", label: "Dribbble" }
+        ];
+
+        const footerQuickLinks = [
+            { label: "About Us", href: "#" },
+            { label: "Services", href: "#services" },
+            { label: "Portfolio", href: "#portfolio" },
+            { label: "Careers", href: "#" }
+        ];
+
+        const footerResourceLinks = [
+            { label: "Blog", href: "#" },
+            { label: "Documentation", href: "#" },
+            { label: "Help Center", href: "#" },
+            { label: "Privacy", href: "#" }
+        ];
+
+        const contactInfo = [
+            { icon: "fas fa-map-marker-alt", text: "123 Innovation St, San Francisco, CA" },
+            { icon: "fas fa-envelope", text: "hello@showcase.dev" },
+            { icon: "fas fa-phone-alt", text: "+1 (555) 123-4567" }
+        ];
+
+        // ════════════════════════════════════════════════════════════
+        // 2. RENDER FUNCTIONS
+        // ════════════════════════════════════════════════════════════
+
+        function renderNav(items) {
+            return items.map(i =>
+                `<li><a href="${i.href}" class="text-sm font-medium text-slate-300 hover:text-indigo-300 transition-colors px-3 py-2 rounded-lg hover:bg-indigo-500/5">${i.label}</a></li>`
+            ).join('');
+        }
+
+        function renderMobileNav(items) {
+            return items.map(i =>
+                `<li><a href="${i.href}" class="block text-sm font-medium text-slate-300 hover:text-indigo-300 transition-colors px-4 py-2.5 rounded-lg hover:bg-indigo-500/5">${i.label}</a></li>`
+            ).join('');
+        }
+
+        function renderServices(items) {
+            return items.map((s, idx) =>
+                `<article class="glass rounded-xl p-6 sm:p-8 card-shine group hover:border-indigo-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-indigo-500/5 stagger-item" style="transition-delay:${idx * 0.1}s">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white text-xl mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <i class="${s.icon}"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${s.title}</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">${s.desc}</p>
+                    <a href="#" class="inline-flex items-center gap-1 text-indigo-400 text-sm font-medium mt-4 group-hover:gap-2 transition-all">Learn more <i class="fas fa-arrow-right text-xs"></i></a>
+                </article>`
+            ).join('');
+        }
+
+        function renderStats(items) {
+            return items.map((s, idx) =>
+                `<div class="text-center glass rounded-xl p-6 sm:p-8 stagger-item" style="transition-delay:${idx * 0.15}s">
+                    <div class="text-3xl sm:text-4xl font-extrabold gradient-text mb-1 progress-counter" data-target="${s.value.replace('+','')}">0</div>
+                    <div class="text-slate-400 text-sm flex items-center justify-center gap-2 mt-1">
+                        <i class="${s.icon} text-indigo-400 text-xs"></i>
+                        <span>${s.label}</span>
+                    </div>
+                </div>`
+            ).join('');
+        }
+
+        function renderPortfolio(items) {
+            return items.map((p, idx) =>
+                `<article class="glass rounded-xl overflow-hidden group hover:border-indigo-500/30 transition-all duration-500 hover:shadow-xl hover:shadow-indigo-500/5 stagger-item" style="transition-delay:${idx * 0.1}s">
+                    <div class="relative overflow-hidden aspect-[3/2]">
+                        <img src="${p.img}" alt="${p.alt}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end p-4">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-300 bg-slate-900/70 px-3 py-1 rounded-full">${p.tag}</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg">${p.title}</h3>
+                        <p class="text-slate-400 text-sm mt-1">${p.tag}</p>
+                    </div>
+                </article>`
+            ).join('');
+        }
+
+        function renderTestimonials(items) {
+            return items.map((t, idx) =>
+                `<article class="glass rounded-xl p-6 sm:p-8 card-shine hover:border-indigo-500/20 transition-all duration-500 stagger-item" style="transition-delay:${idx * 0.15}s">
+                    <div class="flex gap-1 text-amber-400 text-sm mb-4">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-6 italic">"${t.quote}"</p>
+                    <div class="flex items-center gap-3">
+                        <img src="${t.avatar}" alt="${t.alt}" loading="lazy" class="w-10 h-10 rounded-full object-cover border border-slate-600">
+                        <div>
+                            <p class="text-sm font-semibold">${t.name}</p>
+                            <p class="text-xs text-slate-500">${t.role}</p>
+                        </div>
+                    </div>
+                </article>`
+            ).join('');
+        }
+
+        function renderSocialLinks(items) {
+            return items.map(s =>
+                `<a href="${s.href}" class="w-9 h-9 rounded-full glass flex items-center justify-center text-slate-400 hover:text-indigo-300 hover:border-indigo-400/30 transition-all hover:scale-110" aria-label="${s.label}"><i class="${s.icon} text-sm"></i></a>`
+            ).join('');
+        }
+
+        function renderFooterLinks(items) {
+            return items.map(l =>
+                `<li><a href="${l.href}" class="text-slate-400 text-sm hover:text-indigo-300 transition-colors">${l.label}</a></li>`
+            ).join('');
+        }
+
+        function renderContactInfo(items) {
+            return items.map(c =>
+                `<li class="flex items-start gap-2"><i class="${c.icon} text-indigo-400 text-sm mt-0.5"></i><span>${c.text}</span></li>`
+            ).join('');
+        }
+
+        // ════════════════════════════════════════════════════════════
+        // 3. MOUNT
+        // ════════════════════════════════════════════════════════════
+
+        document.getElementById('nav-list').innerHTML = renderNav(navItems);
+        document.getElementById('mobile-nav-list').innerHTML = renderMobileNav(navItems);
+        document.getElementById('services-grid').innerHTML = renderServices(services);
+        document.getElementById('stats-grid').innerHTML = renderStats(stats);
+        document.getElementById('portfolio-grid').innerHTML = renderPortfolio(portfolioItems);
+        document.getElementById('testimonials-grid').innerHTML = renderTestimonials(testimonials);
+        document.getElementById('social-links').innerHTML = renderSocialLinks(socialLinks);
+        document.getElementById('footer-links-1').innerHTML = renderFooterLinks(footerQuickLinks);
+        document.getElementById('footer-links-2').innerHTML = renderFooterLinks(footerResourceLinks);
+        document.getElementById('contact-info').innerHTML = renderContactInfo(contactInfo);
+
+        // ════════════════════════════════════════════════════════════
+        // 4. EVENT DELEGATION
+        // ════════════════════════════════════════════════════════════
+
+        document.addEventListener('click', function(e) {
+            // Smooth scroll for anchor links
+            const link = e.target.closest('a[href^="#"]');
+            if (link) {
+                const href = link.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            }
+
+            // Mobile menu toggle
+            const menuBtn = e.target.closest('#mobile-menu-btn');
+            if (menuBtn) {
+                e.preventDefault();
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('hidden');
+            }
+        });
+
+        // ════════════════════════════════════════════════════════════
+        // 5. SCROLL REVEAL (Intersection Observer)
+        // ════════════════════════════════════════════════════════════
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // If it's a stagger container, animate children
+                    const children = entry.target.querySelectorAll('.stagger-item');
+                    children.forEach((child, i) => {
+                        setTimeout(() => child.classList.add('visible'), i * 100);
+                    });
+                    // If it contains progress counters, animate them
+                    const counters = entry.target.querySelectorAll('.progress-counter');
+                    counters.forEach(counter => {
+                        animateCounter(counter);
+                    });
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+        // Observe all reveal elements
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Also observe the grids directly for stagger children
+        document.querySelectorAll('#services-grid, #stats-grid, #portfolio-grid, #testimonials-grid').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // ════════════════════════════════════════════════════════════
+        // 6. COUNTER ANIMATION
+        // ════════════════════════════════════════════════════════════
+
+        function animateCounter(el) {
+            const target = parseInt(el.getAttribute('data-target'));
+            if (!target || el.dataset.animated) return;
+            el.dataset.animated = 'true';
+            let current = 0;
+            const increment = Math.ceil(target / 40);
+            const interval = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(interval);
+                }
+                el.textContent = current + '+';
+            }, 30);
+        }
+
+        // ════════════════════════════════════════════════════════════
+        // 7. HEADER SCROLL EFFECT
+        // ════════════════════════════════════════════════════════════
+
+        let lastScroll = 0;
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 80) {
+                header.style.background = 'rgba(15, 23, 42, 0.85)';
+                header.style.backdropFilter = 'blur(20px)';
+                header.style.borderBottom = '1px solid rgba(99, 102, 241, 0.1)';
+            } else {
+                header.style.background = 'rgba(30, 41, 59, 0.6)';
+                header.style.backdropFilter = 'blur(16px)';
+                header.style.borderBottom = '1px solid rgba(99, 102, 241, 0.15)';
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ════════════════════════════════════════════════════════════
+        // 8. PARALLAX PARTICLES ON MOUSE MOVE (desktop only)
+        // ════════════════════════════════════════════════════════════
+
+        const hero = document.getElementById('hero');
+        hero.addEventListener('mousemove', function(e) {
+            const particles = hero.querySelectorAll('.particle');
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            particles.forEach((p, i) => {
+                const speed = 0.5 + i * 0.2;
+                p.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+
+        console.log('✨ Showcase site loaded with animations');
+    </script>
+</body>
+</html>
