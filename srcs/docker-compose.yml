@@ -145,6 +145,22 @@ services:
     networks:
       - inception
 
+  #--------------------
+  # Portnair Service
+  #--------------------
+  portainer:
+    build:
+      context: requirements/bonus/portainer
+      dockerfile: Dockerfile
+    container_name: portainer
+    ports:
+      - "9090:9090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+    networks:
+      - inception
+
 #------------------------------------------------------
 # Networks
 #------------------------------------------------------
@@ -170,6 +186,8 @@ volumes:
       type: none
       device: ${HOME}/data/wordpress
       o: bind
+  portainer-data:
+    name: portainer-data
 
 #------------------------------------------------------
 # Secrets
