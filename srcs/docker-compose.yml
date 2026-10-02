@@ -188,6 +188,11 @@ volumes:
       o: bind
   portainer-data:
     name: portainer-data
+    driver: local
+    driver_opts:
+      type: none
+      device: ${HOME}/data/portainer
+      o: bind
 
 #------------------------------------------------------
 # Secrets

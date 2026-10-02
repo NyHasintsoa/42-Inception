@@ -6,7 +6,7 @@
 #    By: nramalan <nramalan@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/01 19:29:49 by nramalan          #+#    #+#              #
-#    Updated: 2026/10/02 15:08:48 by nramalan         ###   ########.fr        #
+#    Updated: 2026/10/02 16:35:44 by nramalan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ DOCKER := docker
 DOCKER_COMPOSE := $(DOCKER) compose
 
 VOLUMES_PATH = $(HOME)/data/
-VOLUMES_NAMES = mariadb wordpress
+VOLUMES_NAMES = mariadb wordpress portainer
 VOLUMES_DIR = $(addprefix $(VOLUMES_PATH), $(VOLUMES_NAMES))
 
 COMPOSE_FILE := srcs/docker-compose.yml
