@@ -6,7 +6,7 @@
 #    By: nramalan <nramalan@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/01 19:29:49 by nramalan          #+#    #+#              #
-#    Updated: 2026/10/02 13:37:23 by nramalan         ###   ########.fr        #
+#    Updated: 2026/10/02 15:08:48 by nramalan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,10 @@ docker-up: $(VOLUMES_DIR) ## Start docker containers
 docker-down: ## Stop docker containers
 	echo "Stop docker containers"
 	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down
+
+.PHONY: docker-logs
+docker-logs: ## Show docker logs
+	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) logs -f
 
 .PHONY: docker-prune
 docker-prune: ## Clean docker

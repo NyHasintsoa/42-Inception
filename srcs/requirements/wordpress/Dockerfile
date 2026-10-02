@@ -4,6 +4,7 @@ RUN apt-get update -y && \
     apt-get install -y \
     php8.4-fpm \
     php8.4-mysql \
+    php8.4-redis \
     php8.4-cli \
     curl \
     mariadb-client \
