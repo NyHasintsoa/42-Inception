@@ -1,4 +1,4 @@
-FROM debian:trixie
+FROM debian:bookworm
 
 RUN apt-get update -y && \
     apt-get install -y nginx openssl gettext-base && \

@@ -132,4 +132,4 @@ wp option update siteurl "https://${DOMAIN_NAME}" --allow-root
 chown -R www-data:www-data /var/www/wordpress
 
 mkdir -p /run/php
-exec php-fpm8.4 -F
+exec php-fpm -F

@@ -1,6 +1,8 @@
 _This project has been created as part of the 42 curriculum by nramalan._
 
-# Description
+# 42 Inception
+
+## Description
 
 This project is a Docker-based web infrastructure designed around the Inception requirement of the 42 curriculum. The goal is to build a small but complete hosting environment using multiple containers instead of installing services directly on the host machine.
 
@@ -14,9 +16,9 @@ The stack provides a production-like architecture where each component is isolat
 
 This project demonstrates how to orchestrate services using Docker Compose, define custom networks, use secrets for sensitive data, and mount persistent storage to retain data across restarts.
 
-# Project description
+## Project description
 
-## Docker and source organization
+### Docker and source organization
 
 The project uses Docker to isolate each service in its own lightweight environment. The files are split by role:
 
@@ -31,19 +33,19 @@ The source structure is intentionally modular:
 - dependencies are isolated by service
 - the stack is easy to rebuild and re-run without affecting the host system
 
-## Main design choices
+### Main design choices
 
 The objective of the architecture is to keep services independent while still allowing them to communicate securely through a dedicated internal network. This allows WordPress to connect to MariaDB and Redis using container names instead of host IPs, which keeps the setup portable and predictable.
 
 The project also uses persistent host-mounted directories to store database and application data outside the containers. This prevents loss of data when containers are recreated or restarted.
 
-## Virtual Machines vs Docker
+### Virtual Machines vs Docker
 
 A virtual machine would run a full guest operating system for each service, which makes it heavier and slower. Docker instead packages only the application and its dependencies in containers, reducing resource usage and startup time while keeping each service isolated.
 
 In practice, Docker is better suited for a school project like this because it provides a lightweight, reproducible environment with fast development iterations and a clear service separation model.
 
-## Secrets vs Environment Variables
+### Secrets vs Environment Variables
 
 Secrets are intended for confidential data such as database passwords and root credentials. They are stored outside the normal environment file and are mounted directly into the relevant container at runtime.
 
@@ -54,21 +56,21 @@ This project uses both correctly:
 - secrets store sensitive database credentials
 - environment variables store application configuration values
 
-## Docker Network vs Host Network
+### Docker Network vs Host Network
 
 The stack uses a dedicated Docker network named `inception`. This lets the containers discover each other by service name and communicate internally without exposing all services directly to the host.
 
 Using a Docker network is safer and cleaner than binding everything to the host network because it keeps the application logically isolated. Host networking is usually reserved for direct low-level networking scenarios, while container-to-container communication is better handled by an internal Docker network.
 
-## Docker Volumes vs Bind Mounts
+### Docker Volumes vs Bind Mounts
 
 Docker volumes are managed by Docker itself and are often used when the data should remain in Docker-controlled storage. Bind mounts link a directory in the container to a directory on the host filesystem.
 
 This project uses bind mounts for persistence because it stores data under `$HOME/data` on the host machine, making it easier for the developer to inspect or recover files outside the container lifecycle. This is especially useful in local development and educational environments where persistence and debugging are important.
 
-# Instructions
+## Instructions
 
-## Requirements
+### Requirements
 
 Before starting the project, make sure Docker is installed and running on the host system.
 
@@ -78,7 +80,7 @@ You also need:
 - a shell environment
 - access to directories under `$HOME/data`
 
-## Configuration
+### Configuration
 
 1. Copy the example environment file:
 
@@ -117,7 +119,7 @@ $HOME/data/wordpress
 $HOME/data/portainer
 ```
 
-## Start the project
+### Start the project
 
 Use the Makefile:
 
@@ -131,7 +133,7 @@ Or start it directly with Docker Compose:
 docker compose -f srcs/docker-compose.yml up -d --build
 ```
 
-## Stop the project
+### Stop the project
 
 ```bash
 make clean
@@ -143,7 +145,7 @@ This is equivalent to:
 docker compose -f srcs/docker-compose.yml down
 ```
 
-## View logs
+### View logs
 
 ```bash
 make docker-logs
@@ -155,7 +157,7 @@ Or:
 docker compose -f srcs/docker-compose.yml logs -f
 ```
 
-## Full cleanup
+### Full cleanup
 
 ```bash
 make fclean
@@ -163,7 +165,7 @@ make fclean
 
 This removes containers and prunes Docker resources.
 
-## Access points
+### Access points
 
 Once the stack is running, the main endpoints are:
 
@@ -176,9 +178,9 @@ Once the stack is running, the main endpoints are:
 
 > Note: the certificate is self-signed, so the browser may present a security warning in local development.
 
-# Resources
+## Resources
 
-## References
+### References
 
 The following references are relevant to understanding the concepts used in this project:
 
@@ -190,7 +192,7 @@ The following references are relevant to understanding the concepts used in this
 - Redis documentation: https://redis.io/docs/
 - OpenSSL documentation: https://www.openssl.org/docs/
 
-## AI usage
+### AI usage
 
 AI was used as a support tool during the preparation of this project documentation and technical explanation. In particular, it helped with:
 
@@ -201,6 +203,6 @@ AI was used as a support tool during the preparation of this project documentati
 
 The actual implementation of the project was validated against the project files, Docker Compose configuration, and service configuration sources in this repository.
 
-## Additional notes
+### Additional notes
 
 This project is intended for local development and educational use. It demonstrates a complete containerized architecture with real services, persistent storage, secret handling, and a reverse proxy, while keeping the setup lightweight and reproducible.

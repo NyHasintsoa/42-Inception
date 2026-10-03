@@ -203,6 +203,7 @@ The project defines a shared Docker network named `inception`.
 ### Bonus services
 
 - `adminer` provides a database administration UI
+- `redis` for wordpress website cache
 - `ftp` provides FTP access to the site content
 - `static-website` hosts a standalone HTML page
 - `portainer` provides a Docker management interface

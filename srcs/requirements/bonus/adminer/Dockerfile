@@ -1,9 +1,9 @@
-FROM debian:trixie
+FROM debian:bookworm
 
 RUN apt-get update -y && \
     apt-get install -y \
-    php8.4-mysql \
-    php8.4-cli \
+    php-mysql \
+    php-cli \
     curl && \
     rm -rf /var/lib/apt/lists/*
 

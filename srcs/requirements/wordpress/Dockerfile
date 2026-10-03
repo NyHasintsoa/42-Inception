@@ -1,11 +1,11 @@
-FROM debian:trixie
+FROM debian:bookworm
 
 RUN apt-get update -y && \
     apt-get install -y \
-    php8.4-fpm \
-    php8.4-mysql \
-    php8.4-redis \
-    php8.4-cli \
+    php-fpm \
+    php-mysql \
+    php-redis \
+    php-cli \
     curl \
     mariadb-client \
     unzip && \
@@ -15,7 +15,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-COPY conf/www.conf /etc/php/8.4/fpm/pool.d/www.conf
+COPY conf/www.conf /etc/php//fpm/pool.d/www.conf
 COPY tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chmod +x /usr/local/bin/entrypoint.sh
