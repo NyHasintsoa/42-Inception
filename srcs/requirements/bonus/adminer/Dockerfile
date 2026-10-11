@@ -2,8 +2,8 @@ FROM debian:bookworm
 
 RUN apt-get update -y && \
     apt-get install -y \
-    php-mysql \
-    php-cli \
+    php8.2-mysql \
+    php8.2-cli \
     curl && \
     rm -rf /var/lib/apt/lists/*
 

@@ -2,10 +2,10 @@ FROM debian:bookworm
 
 RUN apt-get update -y && \
     apt-get install -y \
-    php-fpm \
-    php-mysql \
-    php-redis \
-    php-cli \
+    php8.2-fpm \
+    php8.2-mysql \
+    php8.2-redis \
+    php8.2-cli \
     curl \
     mariadb-client \
     unzip && \
@@ -15,7 +15,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-COPY conf/www.conf /etc/php//fpm/pool.d/www.conf
+COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 COPY tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chmod +x /usr/local/bin/entrypoint.sh

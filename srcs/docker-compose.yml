@@ -9,6 +9,7 @@ services:
     build:
       context: requirements/mariadb
       dockerfile: Dockerfile
+    image: mariadb
     container_name: mariadb
     restart: always
     networks:
@@ -48,6 +49,7 @@ services:
     build:
       context: requirements/wordpress
       dockerfile: Dockerfile
+    image: wordpress
     container_name: wordpress
     restart: always
     networks:
@@ -77,6 +79,7 @@ services:
     build:
       context: requirements/nginx
       dockerfile: Dockerfile
+    image: nginx
     container_name: nginx
     restart: always
     networks:
@@ -97,6 +100,7 @@ services:
     build:
       context: requirements/bonus/adminer
       dockerfile: Dockerfile
+    image: adminer
     container_name: adminer
     restart: always
     ports:
@@ -113,6 +117,7 @@ services:
     build:
       context: requirements/bonus/ftp
       dockerfile: Dockerfile
+    image: ftp
     container_name: ftp
     restart: always
     ports:
@@ -152,6 +157,7 @@ services:
     build:
       context: requirements/bonus/portainer
       dockerfile: Dockerfile
+    image: portainer
     container_name: portainer
     ports:
       - "9090:9090"
